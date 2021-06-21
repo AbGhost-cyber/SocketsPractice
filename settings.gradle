@@ -1,0 +1,2 @@
+rootProject.name = "SocketsPractice"
+include ':app'
