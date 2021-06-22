@@ -3,7 +3,9 @@ package com.crushtech.socketspractice.contract;
 import android.util.Log;
 import android.view.View;
 
-public class ChatPresenter implements ChatContract.ChatPresenter, ChatContract.ChatModel.chatConnectionListener {
+import static com.crushtech.socketspractice.contract.ChatContract.ChatModel.chatConnectionListener;
+
+public class ChatPresenter implements ChatContract.ChatPresenter, chatConnectionListener {
     private final ChatContract.ChatModel model;
     private ChatContract.ChatView mainView;
     private String TAG = getClass().getSimpleName();
@@ -41,11 +43,35 @@ public class ChatPresenter implements ChatContract.ChatPresenter, ChatContract.C
 
     @Override
     public void onFailure(String message) {
+        handleFailure(message);
+        Log.d(TAG, "onFailure: called");
+    }
+
+
+    @Override
+    public void disconnectServer() {
+        if (mainView != null) model.onDisconnect(new chatConnectionListener() {
+            @Override
+            public void onSuccess(String message, ChatContract.ConnectionResult result) {
+                if (mainView != null) {
+                    mainView.setData(message, result.alignment);
+                    mainView.enableSending(false);
+                    mainView.progressState(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(String message) {
+                handleFailure(message);
+            }
+        });
+    }
+
+    private void handleFailure(String message) {
         if (mainView != null) {
             mainView.setData(message, View.TEXT_ALIGNMENT_CENTER);
             mainView.enableSending(false);
             mainView.progressState(View.INVISIBLE);
         }
-        Log.d(TAG, "onFailure: called");
     }
 }

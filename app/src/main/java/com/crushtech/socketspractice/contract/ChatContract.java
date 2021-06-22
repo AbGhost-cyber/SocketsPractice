@@ -14,6 +14,7 @@ public interface ChatContract {
 
     interface ChatModel {
         void onChatConnect(chatConnectionListener chatConnectionListener);
+        void onDisconnect(chatConnectionListener chatConnectionListener);
 
         void sendMessage(chatConnectionListener chatConnectionListener, String message);
 
@@ -31,6 +32,7 @@ public interface ChatContract {
         void onDestroy();
 
         void sendMessageToServer(String message);
+        void disconnectServer();
     }
 
     class ConnectionResult {

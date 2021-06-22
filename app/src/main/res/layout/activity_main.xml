@@ -29,6 +29,7 @@
         android:layout_below="@+id/etPort"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
+        android:drawableEnd="@drawable/ic_baseline_cloud_24"
         android:text="@string/connect_to_server"
         app:cornerRadius="5dp" />
 
@@ -47,7 +48,6 @@
         android:layout_below="@+id/btnConnect"
         android:scrollbars="vertical"
         android:text="@string/no_messages"
-        android:textAlignment="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
     <androidx.appcompat.widget.AppCompatEditText
@@ -65,5 +65,6 @@
         android:enabled="false"
         android:layout_alignParentBottom="true"
         android:text="@string/send"
+        android:drawableEnd="@drawable/ic_baseline_send_24"
         app:cornerRadius="5dp" />
 </RelativeLayout>
