@@ -2,7 +2,11 @@ package com.crushtech.socketspractice;
 
 import java.net.*;
 import java.io.*;
-
+/**
+ * @author UDO ABUNDANCE
+ *         Date: 2021/6/22
+ *         Class description:
+ */
 public class KnockKnockProtocol {
     private static final int WAITING = 0;
     private static final int SENTKNOCKKNOCK = 1;

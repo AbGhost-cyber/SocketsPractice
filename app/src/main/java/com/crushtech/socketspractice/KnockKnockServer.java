@@ -5,7 +5,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+/**
+ * @author UDO ABUNDANCE
+ *         Date: 2021/6/22
+ *         Class description:
+ */
 public class KnockKnockServer {
     public static void main(String[] args) throws IOException {
         int portNumber = 2323;

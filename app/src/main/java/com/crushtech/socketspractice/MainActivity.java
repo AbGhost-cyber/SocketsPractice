@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity implements ChatContract.Chat
                 Toast.makeText(this, "please enter a text", Toast.LENGTH_SHORT).show();
                 return;
             }
-            hideKeyboard();
             presenter.sendMessageToServer(Objects.requireNonNull(etMessage.getText()).toString());
+            hideKeyboard();
         });
 
     }
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ChatContract.Chat
 
     private void initViews() {
         tvMessages = findViewById(R.id.tvMessages);
-        //scroll
+        //make text scrollable
         tvMessages.setMovementMethod(new ScrollingMovementMethod());
         btnConnect = findViewById(R.id.btnConnect);
         btnSend = findViewById(R.id.btnSend);
@@ -100,10 +100,9 @@ public class MainActivity extends AppCompatActivity implements ChatContract.Chat
     @Override
     public void setData(String value, int align) {
         runOnUiThread(() -> {
-            //scroll to recent text magic
+            //scroll and focus current text magic
             SpannableString spannableString = new SpannableString("\n" + value);
             Selection.setSelection(spannableString, spannableString.length());
-
             tvMessages.append(spannableString);
             tvMessages.setTextAlignment(align);
             etMessage.setText("");

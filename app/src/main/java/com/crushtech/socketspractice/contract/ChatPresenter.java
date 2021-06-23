@@ -3,12 +3,18 @@ package com.crushtech.socketspractice.contract;
 import android.util.Log;
 import android.view.View;
 
-import static com.crushtech.socketspractice.contract.ChatContract.ChatModel.chatConnectionListener;
+import com.crushtech.socketspractice.contract.ChatContract.ConnectionResult;
 
+import static com.crushtech.socketspractice.contract.ChatContract.ChatModel.chatConnectionListener;
+/**
+ * @author UDO ABUNDANCE
+ *         Date: 2021/6/22
+ *         Class description:
+ */
 public class ChatPresenter implements ChatContract.ChatPresenter, chatConnectionListener {
     private final ChatContract.ChatModel model;
     private ChatContract.ChatView mainView;
-    private String TAG = getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
 
     public ChatPresenter(ChatContract.ChatModel model, ChatContract.ChatView mainView) {
         this.model = model;
@@ -18,7 +24,7 @@ public class ChatPresenter implements ChatContract.ChatPresenter, chatConnection
     @Override
     public void performConnectionToServer() {
         if (mainView != null) mainView.progressState(View.VISIBLE);
-        model.onChatConnect(this);
+        model.onServerResponse(this);
     }
 
     @Override
@@ -28,11 +34,11 @@ public class ChatPresenter implements ChatContract.ChatPresenter, chatConnection
 
     @Override
     public void sendMessageToServer(String message) {
-        if (mainView != null) model.sendMessage(this, message);
+        if (mainView != null) model.onClientResponse(this, message);
     }
 
     @Override
-    public void onSuccess(String message, ChatContract.ConnectionResult result) {
+    public void onSuccess(String message, ConnectionResult result) {
         if (mainView != null) {
             mainView.setData(message, result.alignment);
             mainView.enableSending(true);
@@ -52,7 +58,7 @@ public class ChatPresenter implements ChatContract.ChatPresenter, chatConnection
     public void disconnectServer() {
         if (mainView != null) model.onDisconnect(new chatConnectionListener() {
             @Override
-            public void onSuccess(String message, ChatContract.ConnectionResult result) {
+            public void onSuccess(String message, ConnectionResult result) {
                 if (mainView != null) {
                     mainView.setData(message, result.alignment);
                     mainView.enableSending(false);

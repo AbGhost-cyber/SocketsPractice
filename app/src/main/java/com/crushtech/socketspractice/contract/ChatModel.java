@@ -9,7 +9,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-
+/**
+ * @author UDO ABUNDANCE
+ *         Date: 2021/6/22
+ *         Class description:
+ */
 public class ChatModel implements ChatContract.ChatModel {
     private final String ipAddress;
     private final int port;
@@ -48,13 +52,15 @@ public class ChatModel implements ChatContract.ChatModel {
     }
 
     @Override
-    public void onChatConnect(chatConnectionListener chatConnectionListener) {
+    public void onServerResponse(chatConnectionListener chatConnectionListener) {
         new Thread(() -> {
             try {
+                //open socket
                 clientSocket = new Socket(getIpAddress(), getPort());
+                //fetch out and in data stream from socket
                 DataOutputStream dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
                 DataInputStream dataInputStream = new DataInputStream(clientSocket.getInputStream());
-
+                //get result
                 ConnectionResult result = new ConnectionResult(dataOutputStream,
                         dataInputStream, View.TEXT_ALIGNMENT_TEXT_START);
                 if (chatConnectionListener != null) {
@@ -68,7 +74,7 @@ public class ChatModel implements ChatContract.ChatModel {
                         if (fromServer.equals("Bye."))
                             break;
                     }
-                    Log.d(TAG, "fetchChats: called");
+                    Log.d(TAG, "fetchChats: success");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -79,7 +85,7 @@ public class ChatModel implements ChatContract.ChatModel {
     }
 
     @Override
-    public void sendMessage(chatConnectionListener chatConnectionListener, String message) {
+    public void onClientResponse(chatConnectionListener chatConnectionListener, String message) {
         new Thread(() -> {
             if (message != null && chatConnectionListener != null) {
                 chatConnectionListener.onSuccess("you\uD83D\uDE0A: " + message + "\n", getResult());
@@ -102,7 +108,7 @@ public class ChatModel implements ChatContract.ChatModel {
                     getResult().dI.close();
                     getSocket().close();
                 }
-                chatConnectionListener.onSuccess("Chat Disconnected", result);
+                chatConnectionListener.onSuccess("Chat Disconnected", getResult());
             } catch (IOException e) {
                 e.printStackTrace();
                 chatConnectionListener.onFailure(e.getMessage());
